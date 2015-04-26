@@ -5,7 +5,7 @@
 using System;
 using Mindosa.Hydra.Attributes;
 
-namespace Mindosa.Hydra.Internal
+namespace Mindosa.Hydra
 {
     /// <summary>
     /// Use by IMapper to override table bindings for an object

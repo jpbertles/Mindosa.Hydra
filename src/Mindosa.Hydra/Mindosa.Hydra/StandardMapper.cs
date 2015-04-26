@@ -5,7 +5,7 @@
 using System;
 using System.Reflection;
 
-namespace Mindosa.Hydra.Internal
+namespace Mindosa.Hydra
 {
     /// <summary>
     /// StandardMapper is the default implementation of IMapper used by PetaPoco

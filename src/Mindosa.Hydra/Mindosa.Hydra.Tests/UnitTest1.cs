@@ -1,12 +1,7 @@
 ﻿using System;
 using System.Configuration;
 using System.Data.SqlClient;
-using System.IO;
 using System.Linq;
-using Microsoft.SqlServer.Management.Common;
-using Microsoft.SqlServer.Management.Smo;
-using Mindosa.Hydra.Attributes;
-using Mindosa.Hydra.Internal;
 using Mindosa.Hydra.Tests.Infrastructure;
 using NUnit.Framework;
 
@@ -38,13 +33,15 @@ namespace Mindosa.Hydra.Tests
         [TestFixtureSetUp]
         public void Setup()
         {
+            //SqlServerTypes.Utilities.LoadNativeAssemblies(AppDomain.CurrentDomain.BaseDirectory);
+
             UnitTestStartAndEnd.Start(DatabaseName);
-            ExecuteNonQuery("CREATE Table TestObject (id int not null, name varchar(250))");
-            ExecuteNonQuery("INSERT INTO TestObject (id, name) values(1, 'One')");
-            ExecuteNonQuery("INSERT INTO TestObject (id, name) values(2, 'Two')");
-            ExecuteNonQuery("INSERT INTO TestObject (id, name) values(3, 'Three')");
-            ExecuteNonQuery("INSERT INTO TestObject (id, name) values(4, 'Four')");
-            ExecuteNonQuery("INSERT INTO TestObject (id, name) values(5, 'Five')");
+            ExecuteNonQuery("CREATE Table TestObject (id int not null, name varchar(250), location geography)");
+            ExecuteNonQuery("INSERT INTO TestObject (id, name, location) values(1, 'One', geography::STGeomFromText('Point(-122.360 47.656)', 4326))");
+            ExecuteNonQuery("INSERT INTO TestObject (id, name, location) values(2, 'Two', geography::STGeomFromText('Point(-122.360 47.656)', 4326))");
+            ExecuteNonQuery("INSERT INTO TestObject (id, name, location) values(3, 'Three', geography::STGeomFromText('Point(-122.360 47.656)', 4326))");
+            ExecuteNonQuery("INSERT INTO TestObject (id, name, location) values(4, 'Four', geography::STGeomFromText('Point(-122.360 47.656)', 4326))");
+            ExecuteNonQuery("INSERT INTO TestObject (id, name, location) values(5, 'Five', geography::STGeomFromText('Point(-122.360 47.656)', 4326))");
         }
 
         [Test]
@@ -54,17 +51,52 @@ namespace Mindosa.Hydra.Tests
             {
                 using (var cmd = connection.CreateCommand())
                 {
-                    cmd.CommandText = "select id, name, id * 4 as Comp from TestObject order by id";
+                    cmd.CommandText = @"select id, name, id * 4 as Comp, Location from TestObject order by id; 
+                                        select top 1 id, name, id * 4 as Comp, Location from TestObject order by id desc;";
 
                     cmd.Connection.Open();
                     using (var reader = cmd.ExecuteReader())
                     {
-                        var data = reader.Hydrate<TestObject>();
+                        var resultSet = reader.Hydrate<TestObject>();
 
-                        Assert.AreEqual(5, data.Count);
-                        Assert.AreEqual("One", data.First().Name);
-                        Assert.AreEqual(4, data.First().Comp);
-                        Assert.AreEqual("Id: 1", data.First().StringId);
+                        var secondResultSet = reader.Hydrate<TestObject>();
+
+                        Assert.AreEqual(5, resultSet.Count);
+                        Assert.AreEqual("One", resultSet.First().Name);
+                        Assert.AreEqual(4, resultSet.First().Comp);
+                        Assert.AreEqual("Id: 1", resultSet.First().StringId);
+
+                        Assert.AreEqual(1, secondResultSet.Count);
+                        Assert.AreEqual("Id: 5", secondResultSet.Single().StringId);
+                    }
+                }
+            }
+        }
+
+        [Test]
+        public async void TestingAsyncHydration()
+        {
+            using (var connection = new SqlConnection(ConfigurationManager.ConnectionStrings[DatabaseConnName].ConnectionString))
+            {
+                using (var cmd = connection.CreateCommand())
+                {
+                    cmd.CommandText = @"select id, name, id * 4 as Comp, Location from TestObject order by id; 
+                                        select top 1 id, name, id * 4 as Comp, Location from TestObject order by id desc;";
+
+                    cmd.Connection.Open();
+                    using (var reader = await cmd.ExecuteReaderAsync())
+                    {
+                        var resultSet = reader.Hydrate<TestObject>();
+
+                        var secondResultSet = reader.Hydrate<TestObject>();
+
+                        Assert.AreEqual(5, resultSet.Count);
+                        Assert.AreEqual("One", resultSet.First().Name);
+                        Assert.AreEqual(4, resultSet.First().Comp);
+                        Assert.AreEqual("Id: 1", resultSet.First().StringId);
+
+                        Assert.AreEqual(1, secondResultSet.Count);
+                        Assert.AreEqual("Id: 5", secondResultSet.Single().StringId);
                     }
                 }
             }
@@ -75,23 +107,5 @@ namespace Mindosa.Hydra.Tests
         {
             UnitTestStartAndEnd.End(DatabaseName);
         }
-    }
-
-    public class TestObject
-    {
-        public string Name { get; set; }
-        //[ComputedColumn]
-        public int Comp { get; set; }
-        [CustomMapping("Id", typeof(IdMapper))]
-        public string StringId { get; set; }
-    }
-
-    public class IdMapper: ICustomMapper
-    {
-
-        public Func<object, object> GetMapper()
-        {
-            return x => "Id: " + x;
-        }
-    }
+    }    
 }

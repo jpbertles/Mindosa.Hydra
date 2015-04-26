@@ -49,16 +49,16 @@
     <Compile Include="Attributes\TableNameAttribute.cs" />
     <Compile Include="Hydra.cs" />
     <Compile Include="Internal\Cache.cs" />
-    <Compile Include="Internal\ColumnInfo.cs" />
+    <Compile Include="ColumnInfo.cs" />
     <Compile Include="Internal\EnumMapper.cs" />
-    <Compile Include="Internal\ICustomMapper.cs" />
-    <Compile Include="Internal\IMapper.cs" />
+    <Compile Include="ICustomMapper.cs" />
+    <Compile Include="IMapper.cs" />
     <Compile Include="Internal\Mappers.cs" />
     <Compile Include="Internal\PocoColumn.cs" />
     <Compile Include="Internal\PocoData.cs" />
     <Compile Include="Internal\Singleton.cs" />
-    <Compile Include="Internal\StandardMapper.cs" />
-    <Compile Include="Internal\TableInfo.cs" />
+    <Compile Include="StandardMapper.cs" />
+    <Compile Include="TableInfo.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup />

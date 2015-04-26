@@ -331,7 +331,7 @@ namespace Mindosa.Hydra.Internal
                 {
                     return src => EnumMapper.EnumFromString(dstType, (string)src);
                 }
-                else
+                else if (srcType.IsAssignableFrom(typeof (IConvertible)))
                 {
                     return src => Convert.ChangeType(src, dstType, null);
                 }

@@ -6,7 +6,7 @@ using System;
 using System.Reflection;
 using Mindosa.Hydra.Attributes;
 
-namespace Mindosa.Hydra.Internal
+namespace Mindosa.Hydra
 {
     /// <summary>
     /// Hold information about a column in the database.

@@ -3,13 +3,9 @@
 // Copyright © 2011-2012 Topten Software.  All Rights Reserved.
 
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace Mindosa.Hydra.Internal
+namespace Mindosa.Hydra
 {
     /// <summary>
     /// IMapper provides a way to hook into PetaPoco's Database to POCO mapping mechanism to either
