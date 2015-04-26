@@ -86,9 +86,9 @@ namespace Mindosa.Hydra.Tests
                     cmd.Connection.Open();
                     using (var reader = await cmd.ExecuteReaderAsync())
                     {
-                        var resultSet = reader.Hydrate<TestObject>();
+                        var resultSet = await reader.HydrateAsync<TestObject>();
 
-                        var secondResultSet = reader.Hydrate<TestObject>();
+                        var secondResultSet = await reader.HydrateAsync<TestObject>();
 
                         Assert.AreEqual(5, resultSet.Count);
                         Assert.AreEqual("One", resultSet.First().Name);
