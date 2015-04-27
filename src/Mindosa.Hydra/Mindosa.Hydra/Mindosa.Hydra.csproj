@@ -60,6 +60,7 @@
     <Compile Include="StandardMapper.cs" />
     <Compile Include="TableInfo.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="XmlMapper.cs" />
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

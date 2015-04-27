@@ -35,3 +35,33 @@ using (var connection = new SqlConnection(connectionString))
 	}
 }
 ```
+
+For more complicated scenarios you can implement custom mapping that will be applied during hydration. For example, if you are returning xml in your result set, you can use the CustomMapping attribute to map the resultset appropriately.
+
+```csharp
+public class Location
+{
+	public string Address { get; set; }
+	public string PostalCode { get; set; }
+}
+
+public class User 
+{
+    public int UserId { get;set; }
+    public string Email { get;set; }
+	[CustomMapping("CustomData", typeof(XmlMapper<Location>))]
+	public Location Location { get; set; }
+}
+
+public class XmlMapper<T> : ICustomMapper
+{
+	public Func<object, object> GetMapper()
+	{
+		return x =>
+		{
+			using (var reader = new StringReader(x.ToString()))
+				return (T)(new XmlSerializer(typeof(T)).Deserialize(reader));
+		};
+	}
+}
+```

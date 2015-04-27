@@ -12,5 +12,7 @@ namespace Mindosa.Hydra.Tests.Infrastructure
         public string StringId { get; set; }
         //[CustomMapping("Location", typeof(GeographyMapper))]
         public SqlGeography Location { get; set; }
+        [CustomMapping("CustomData", typeof(XmlMapper<CustomObject>))]
+        public CustomObject CustomData { get; set; }
     }
 }
