@@ -1,0 +1,19 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2011/08/nuspec.xsd">
+    <metadata>
+        <id>Mindosa.Hydra</id>
+        <version>1.0.1</version>
+        <title>Hydra</title>
+        <authors>JP Bertles</authors>
+        <licenseUrl>https://github.com/jpbertles/Mindosa.Hydra/blob/master/LICENSE</licenseUrl>
+        <projectUrl>https://github.com/jpbertles/Mindosa.Hydra</projectUrl>
+        <requireLicenseAcceptance>false</requireLicenseAcceptance>
+        <description>Inspired by and based on the micro-ORMs PetaPoco and NPoco. The goal of this library is to give a simple, extension based API on top of ADO.Net. Specifically, making the hydration of multiple result sets simple and straight forward, particularly when doing so asynchronously.</description>
+        <summary>Inspired by and based on the micro-ORMs PetaPoco and NPoco. The goal of this library is to give a simple, extension based API on top of ADO.Net. Specifically, making the hydration of multiple result s</summary>
+        <copyright>MIT</copyright>
+        <tags>orm sql micro-orm database</tags>
+    </metadata>
+    <files>
+        <file src="bin\Debug\Mindosa.Hydra.dll" target="lib\Mindosa.Hydra.dll" />
+    </files>
+</package>
